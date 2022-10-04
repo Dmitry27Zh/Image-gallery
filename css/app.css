@@ -23,10 +23,8 @@ img {
 .gallery-img {
   aspect-ratio: 4 / 3;
   border-radius: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
-  transform: translateZ(0);
+  transition: transform 0.3s;
   cursor: pointer;
-  will-change: transform, box-shadow;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -38,4 +36,26 @@ img {
 
 .gallery-img:focus {
   outline: none;
+}
+
+#popup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  background-color: #000000;
+  cursor: pointer;
+  transform: translateY(-100%);
+  visibility: hidden;
+  transition: transform 0.3s, visibility 0.3s;
+}
+
+#popup.is-shown {
+  transform: translateY(0);
+  visibility: visible;
+}
+
+.popup-img {
+  margin: auto;
+  height: 100%;
+  object-fit: contain;
 }
