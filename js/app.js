@@ -68,6 +68,7 @@ const renderImages = () => {
 
     renderImage(src, srcset, ['gallery-img'], galleryElement, true, (imageElement) => {
       imageElement.addEventListener('click', () => {
+        imageElement.blur()
         openPopup(i)
       })
     })

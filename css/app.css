@@ -4,6 +4,7 @@ body {
 }
 
 img {
+  display: block;
   max-width: 100%;
   object-fit: cover;
 }
@@ -28,7 +29,13 @@ img {
   -webkit-tap-highlight-color: transparent;
 }
 
-.gallery-img:hover,
+@media (hover: hover) {
+  .gallery-img:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 10px #000000;
+  }
+}
+
 .gallery-img:focus-visible {
   transform: translateY(-2px);
   box-shadow: 3px 3px 10px #000000;
