@@ -26,8 +26,8 @@ const createImage = (src, srcset, classList, focusable) => {
   return element
 }
 
-const renderImage = (src, srcset, classList, container, onImageElementAction) => {
-  const imageElement = createImage(src, srcset, classList, true)
+const renderImage = (src, srcset, classList, container, focusable, onImageElementAction) => {
+  const imageElement = createImage(src, srcset, classList, focusable)
   container.append(imageElement)
 
   if (typeof onImageElementAction === 'function') {
@@ -66,7 +66,7 @@ const renderImages = () => {
     const src = getImageSrc(i)
     const srcset = ''
 
-    renderImage(src, srcset, ['gallery-img'], galleryElement, (imageElement) => {
+    renderImage(src, srcset, ['gallery-img'], galleryElement, true, (imageElement) => {
       imageElement.addEventListener('click', () => {
         openPopup(i)
       })
