@@ -54,6 +54,8 @@ const closePopup = () => {
   }
 }
 
+const isPopupClosed = () => !popupElement.classList.contains('is-shown')
+
 const addPopupListeners = () => {
   popupElement.addEventListener('click', () => {
     closePopup()
@@ -73,8 +75,10 @@ const renderImages = () => {
 
     renderImage(src, srcset, ['gallery-img'], galleryElement, true, (imageElement) => {
       imageElement.addEventListener('click', () => {
-        imageElement.blur()
-        openPopup(i)
+        if (isPopupClosed()) {
+          imageElement.blur()
+          openPopup(i)
+        }
       })
     })
   }
