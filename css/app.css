@@ -6,7 +6,14 @@ body {
 img {
   display: block;
   max-width: 100%;
+  max-height: 100%;
   object-fit: cover;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .container {
@@ -21,28 +28,39 @@ img {
   gap: 20px;
 }
 
-.gallery-img {
+.image-btn {
   aspect-ratio: 4 / 3;
-  border-radius: 10px;
+  padding: 0;
+  background-color: #eeeeee;
+  border: none;
   transition: transform 0.3s;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+  /* overflow: hidden; */
 }
 
 @media (hover: hover) {
-  .gallery-img:hover {
+  .image-btn:hover {
     transform: translateY(-2px);
     box-shadow: 3px 3px 10px #000000;
   }
 }
 
-.gallery-img:focus-visible {
+.image-btn:focus-visible {
   transform: translateY(-2px);
   box-shadow: 3px 3px 10px #000000;
 }
 
-.gallery-img:focus {
+.image-btn:focus {
   outline: none;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+}
+
+.image-btn,
+.gallery-img {
+  border-radius: 10px;
 }
 
 #popup {

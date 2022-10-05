@@ -13,25 +13,30 @@ const getImageSrcset = (index, category = 'architecture') => {
     ./img/${category}-${index}-1920.jpg 1920w`
 }
 
-const createImage = (src, srcset, classList, focusable) => {
+const createImage = (src, srcset, classList) => {
   const element = document.createElement('img')
   element.classList.add(...classList)
   element.src = src
   element.srcset = srcset
-
-  if (focusable) {
-    element.setAttribute('tabindex', '0')
-  }
-
+  element.alt = 'Gallery image'
   return element
 }
 
-const renderImage = (src, srcset, classList, container, focusable, onImageElementAction) => {
-  const imageElement = createImage(src, srcset, classList, focusable)
-  container.append(imageElement)
+const renderImage = (src, srcset, classList, container, focusable, onElementAction) => {
+  let element = createImage(src, srcset, classList)
 
-  if (typeof onImageElementAction === 'function') {
-    onImageElementAction(imageElement)
+  if (focusable) {
+    const button = document.createElement('button')
+    button.classList.add('image-btn')
+    button.append(element)
+    button.setAttribute('aria-label', 'Open full image')
+    element = button
+  }
+
+  container.append(element)
+
+  if (typeof onElementAction === 'function') {
+    onElementAction(element)
   }
 }
 
