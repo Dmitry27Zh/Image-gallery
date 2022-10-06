@@ -1,6 +1,7 @@
 const imagesCount = 37
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
+let lastImageIndex
 
 const getImageSrc = (index, viewport = '800', category = 'architecture') => {
   return `./img/content/${category}-${index}-${viewport}.jpg`
@@ -56,12 +57,33 @@ const openPopup = (index) => {
   const srcset = getImageSrcset(index)
   renderImage(src, srcset, ['popup-img'], popupElement)
   popupElement.classList.add('is-shown')
+  lastImageIndex = index
 }
 
 const closePopup = () => {
   if (popupElement.classList.contains('is-shown')) {
-    popupElement.classList.remove('is-shown')
+    popupElement.classList.remove('is-shown', 'is-loaded', 'is-error')
     popupElement.innerHTML = ''
+  }
+}
+
+const switchImage = (isPrev) => {
+  const isNext = !isPrev
+  const isSwitchPrev = isPrev && lastImageIndex > 1
+  const isSwitchNext = isNext && lastImageIndex < imagesCount
+  const isSwitch = isSwitchPrev || isSwitchNext
+
+  if (isSwitchPrev) {
+    lastImageIndex--
+  }
+
+  if (isSwitchNext) {
+    lastImageIndex++
+  }
+
+  if (isSwitch) {
+    closePopup()
+    openPopup(lastImageIndex)
   }
 }
 
@@ -69,12 +91,22 @@ const isPopupClosed = () => !popupElement.classList.contains('is-shown')
 
 const addPopupListeners = () => {
   popupElement.addEventListener('click', () => {
-    closePopup()
+    if (!isPopupClosed()) {
+      closePopup()
+    }
   })
 
   document.addEventListener('keydown', (e) => {
+    if (isPopupClosed()) {
+      return
+    }
+
     if (e.key === 'Escape') {
       closePopup()
+    }
+
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      switchImage(e.key === 'ArrowLeft')
     }
   })
 }
