@@ -38,13 +38,13 @@ button {
 }
 
 @media (hover: hover) {
-  .image-btn:hover {
+  .image-btn.is-loaded:hover {
     transform: translateY(-2px);
     box-shadow: 3px 3px 10px #000000;
   }
 }
 
-.image-btn:focus-visible {
+.image-btn.is-loaded:focus-visible {
   transform: translateY(-2px);
   box-shadow: 3px 3px 10px #000000;
 }

@@ -88,6 +88,7 @@ const switchImage = (isPrev) => {
 }
 
 const isPopupClosed = () => !popupElement.classList.contains('is-shown')
+const isImageLoaded = (element) => element.classList.contains('is-loaded')
 
 const addPopupListeners = () => {
   popupElement.addEventListener('click', () => {
@@ -116,10 +117,10 @@ const renderImages = () => {
     const src = getImageSrc(i)
     const srcset = ''
 
-    renderImage(src, srcset, ['gallery-img'], galleryElement, true, (imageElement) => {
-      imageElement.addEventListener('click', () => {
-        if (isPopupClosed()) {
-          imageElement.blur()
+    renderImage(src, srcset, ['gallery-img'], galleryElement, true, (element) => {
+      element.addEventListener('click', () => {
+        if (isPopupClosed() && isImageLoaded(element)) {
+          element.blur()
           openPopup(i)
         }
       })
