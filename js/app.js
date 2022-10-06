@@ -3,14 +3,24 @@ const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
 
 const getImageSrc = (index, viewport = '800', category = 'architecture') => {
-  return `./img/${category}-${index}-${viewport}.jpg`
+  return `./img/content/${category}-${index}-${viewport}.jpg`
 }
 
 const getImageSrcset = (index, category = 'architecture') => {
-  return `./img/${category}-${index}-400.jpg 400w,
-    ./img/${category}-${index}-800.jpg 800w,
-    ./img/${category}-${index}-1200.jpg 1200w,
-    ./img/${category}-${index}-1920.jpg 1920w`
+  return `./img/content/${category}-${index}-400.jpg 400w,
+    ./img/content/${category}-${index}-800.jpg 800w,
+    ./img/content/${category}-${index}-1200.jpg 1200w,
+    ./img/content/${category}-${index}-1920.jpg 1920w`
+}
+
+const addLoadImageListeners = (element) => {
+  element.addEventListener('load', () => {
+    element.parentElement.classList.add('is-loaded')
+  })
+
+  element.addEventListener('error', () => {
+    element.parentElement.classList.add('is-error')
+  })
 }
 
 const createImage = (src, srcset, classList) => {
@@ -19,6 +29,7 @@ const createImage = (src, srcset, classList) => {
   element.src = src
   element.srcset = srcset
   element.alt = 'Gallery image'
+  addLoadImageListeners(element)
   return element
 }
 
