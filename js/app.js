@@ -1,4 +1,4 @@
-const imagesCount = 15
+const imagesCount = 37
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
 
