@@ -1,4 +1,4 @@
-const imagesCount = 37
+const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
 let lastImageIndex

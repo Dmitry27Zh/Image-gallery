@@ -34,7 +34,11 @@ button {
   background-color: #eeeeee;
   border: none;
   transition: transform 0.3s;
-  /* overflow: hidden; */
+  cursor: default;
+}
+
+.image-btn.is-loaded {
+  cursor: pointer;
 }
 
 @media (hover: hover) {
