@@ -87,17 +87,18 @@ button {
   background-image: none;
 }
 
+#popup.is-loaded .popup-img {
+  visibility: visible;
+}
+
 #popup.is-error {
   background-image: url('../img/icons/broken-image.svg');
   background-size: min(320px, 80%) min(320px, 80%);
-}
-
-#popup.is-error .popup-img {
-  display: none;
 }
 
 .popup-img {
   margin: auto;
   height: 100%;
   object-fit: contain;
+  visibility: hidden;
 }

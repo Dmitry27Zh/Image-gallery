@@ -23,7 +23,7 @@ const addListeners = (element) => {
 const newImagesObserver = new MutationObserver((mutations) => {
   mutations.forEach(({ addedNodes }) => {
     addedNodes.forEach((node) => {
-      const imgElement = node?.querySelector(NodeSelector.IMG)
+      const imgElement = node.matches?.(NodeSelector.IMG) ? node : node.querySelector?.(NodeSelector.IMG)
 
       if (imgElement) {
         addListeners(imgElement)
