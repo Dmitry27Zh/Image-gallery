@@ -1,3 +1,5 @@
+import './modules/img-load-state.js'
+
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
@@ -14,32 +16,23 @@ const getImageSrcset = (index, category = 'architecture') => {
     ./img/content/${category}-${index}-1920.jpg 1920w`
 }
 
-const addLoadImageListeners = (element) => {
-  element.addEventListener('load', () => {
-    element.parentElement.classList.add('is-loaded')
-  })
-
-  element.addEventListener('error', () => {
-    element.parentElement.classList.add('is-error')
-  })
-}
-
-const createImage = (src, srcset, classList) => {
+const createImage = (src, srcset, dataSrc, dataSrcset, classList) => {
   const element = document.createElement('img')
   element.classList.add(...classList)
   element.src = src
   element.srcset = srcset
+  element.setAttribute('data-load', '')
   element.alt = 'Gallery image'
-  addLoadImageListeners(element)
   return element
 }
 
-const renderImage = (src, srcset, classList, container, focusable, onElementAction) => {
-  let element = createImage(src, srcset, classList)
+const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, focusable, onElementAction) => {
+  let element = createImage(src, srcset, dataSrc, dataSrcset, classList)
 
   if (focusable) {
     const button = document.createElement('button')
     button.classList.add('image-btn')
+    button.setAttribute('data-load-container', '')
     button.append(element)
     button.setAttribute('aria-label', 'Open full image')
     element = button
@@ -55,7 +48,7 @@ const renderImage = (src, srcset, classList, container, focusable, onElementActi
 const openPopup = (index) => {
   const src = getImageSrc(index)
   const srcset = getImageSrcset(index)
-  renderImage(src, srcset, ['popup-img'], popupElement)
+  renderImage(src, srcset, null, null, ['popup-img'], popupElement)
   popupElement.classList.add('is-shown')
   lastImageIndex = index
 }
@@ -116,8 +109,10 @@ const renderImages = () => {
   for (let i = 1; i <= imagesCount; i++) {
     const src = getImageSrc(i)
     const srcset = ''
+    const dataSrc = getImageSrc(i)
+    const dataSrcset = ''
 
-    renderImage(src, srcset, ['gallery-img'], galleryElement, true, (element) => {
+    renderImage(src, srcset, dataSrc, dataSrcset, ['gallery-img'], galleryElement, true, (element) => {
       element.addEventListener('click', () => {
         if (isPopupClosed() && isImageLoaded(element)) {
           element.blur()
