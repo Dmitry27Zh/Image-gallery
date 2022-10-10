@@ -1,4 +1,5 @@
 import './modules/load-state.js'
+import './modules/lazy-load.js'
 
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
@@ -24,6 +25,7 @@ const createImage = (src, srcset, dataSrc, dataSrcset, classList) => {
 
   if (dataSrc) {
     element.dataset.src = dataSrc
+    element.setAttribute('data-lazy', '')
   }
 
   if (dataSrcset) {
@@ -116,7 +118,7 @@ const addPopupListeners = () => {
 
 const renderImages = () => {
   for (let i = 1; i <= imagesCount; i++) {
-    const src = getImageSrc(i)
+    const src = ''
     const srcset = ''
     const dataSrc = getImageSrc(i)
     const dataSrcset = ''

@@ -1,0 +1,7 @@
+[data-src] {
+  visibility: hidden;
+}
+
+[data-src]:not([src='']) {
+  visibility: visible;
+}
