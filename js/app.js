@@ -1,4 +1,4 @@
-import './modules/img-load-state.js'
+import './modules/load-state.js'
 
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
@@ -19,8 +19,17 @@ const getImageSrcset = (index, category = 'architecture') => {
 const createImage = (src, srcset, dataSrc, dataSrcset, classList) => {
   const element = document.createElement('img')
   element.classList.add(...classList)
-  element.src = src
-  element.srcset = srcset
+  element.src = src ?? ''
+  element.srcset = srcset ?? ''
+
+  if (dataSrc) {
+    element.dataset.src = dataSrc
+  }
+
+  if (dataSrcset) {
+    element.dataset.srcset = dataSrcset
+  }
+
   element.setAttribute('data-load', '')
   element.alt = 'Gallery image'
   return element

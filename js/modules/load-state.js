@@ -1,5 +1,5 @@
 const NodeSelector = {
-  IMG: 'img[data-load]',
+  ELEMENT: '[data-load]',
   CONTAINER: '[data-load-container]',
 }
 
@@ -23,7 +23,7 @@ const addListeners = (element) => {
 const newImagesObserver = new MutationObserver((mutations) => {
   mutations.forEach(({ addedNodes }) => {
     addedNodes.forEach((node) => {
-      const imgElement = node.matches?.(NodeSelector.IMG) ? node : node.querySelector?.(NodeSelector.IMG)
+      const imgElement = node.matches?.(NodeSelector.ELEMENT) ? node : node.querySelector?.(NodeSelector.ELEMENT)
 
       if (imgElement) {
         addListeners(imgElement)
@@ -33,7 +33,7 @@ const newImagesObserver = new MutationObserver((mutations) => {
 })
 
 const initImgLoadState = () => {
-  const elements = document.querySelectorAll(NodeSelector.IMG)
+  const elements = document.querySelectorAll(NodeSelector.ELEMENT)
   elements.forEach(addListeners)
 
   newImagesObserver.observe(document.body, {
