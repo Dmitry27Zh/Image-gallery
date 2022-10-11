@@ -1,5 +1,6 @@
 import './modules/load-state.js'
 import './modules/lazy-load.js'
+import './modules/transition-state.js'
 
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
@@ -61,10 +62,13 @@ const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, foc
 }
 
 const isPopupClosed = () => !popupElement.classList.contains('is-shown')
+const isPopupTransition = () => popupElement.classList.contains('is-transition')
 const isImageLoaded = (element) => element.classList.contains('is-loaded')
 
 const openPopup = (index, element = images[index]) => {
-  if (isPopupClosed() && isImageLoaded(element)) {
+  const isOpenAllowed = !isPopupTransition() && isPopupClosed() && isImageLoaded(element)
+
+  if (isOpenAllowed) {
     element.blur()
     const src = getImageSrc(index)
     const srcset = getImageSrcset(index)
