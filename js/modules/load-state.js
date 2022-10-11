@@ -1,4 +1,4 @@
-const NodeSelector = {
+const ElementSelector = {
   ELEMENT: '[data-load]',
   CONTAINER: '[data-load-container]',
 }
@@ -9,7 +9,7 @@ const StateClass = {
 }
 
 const addListeners = (element) => {
-  const container = element.closest(NodeSelector.CONTAINER)
+  const container = element.closest(ElementSelector.CONTAINER)
 
   element.addEventListener('load', () => {
     container.classList.add(StateClass.LOADED)
@@ -21,7 +21,7 @@ const addListeners = (element) => {
 
   const removeObserver = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
-      const isElementRemoved = [...mutation.removedNodes].some((node) => node.matches?.(NodeSelector.ELEMENT))
+      const isElementRemoved = [...mutation.removedNodes].some((node) => node.matches?.(ElementSelector.ELEMENT))
 
       if (isElementRemoved) {
         container.classList.remove(...Object.values(StateClass))
@@ -38,7 +38,7 @@ const addListeners = (element) => {
 const newElementsObserver = new MutationObserver((mutations) => {
   mutations.forEach(({ addedNodes }) => {
     addedNodes.forEach((node) => {
-      const element = node.matches?.(NodeSelector.ELEMENT) ? node : node.querySelector?.(NodeSelector.ELEMENT)
+      const element = node.matches?.(ElementSelector.ELEMENT) ? node : node.querySelector?.(ElementSelector.ELEMENT)
 
       if (element) {
         addListeners(element)
@@ -48,7 +48,7 @@ const newElementsObserver = new MutationObserver((mutations) => {
 })
 
 const initImgLoadState = () => {
-  const elements = document.querySelectorAll(NodeSelector.ELEMENT)
+  const elements = document.querySelectorAll(ElementSelector.ELEMENT)
   elements.forEach(addListeners)
 
   newElementsObserver.observe(document.body, {
