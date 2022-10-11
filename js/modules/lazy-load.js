@@ -1,4 +1,8 @@
 const SELECTOR = '[data-lazy][data-src]'
+const settings = {
+  threshold: '0.5',
+  rootMargin: '0px',
+}
 
 const load = (element) => {
   const src = element.getAttribute('data-src')
@@ -17,7 +21,7 @@ const intersectionObserver = new IntersectionObserver((entries) => {
       intersectionObserver.unobserve(entry.target)
     }
   })
-})
+}, settings)
 
 const newElementsObserver = new MutationObserver((mutations) => {
   mutations.forEach(({ addedNodes }) => {
