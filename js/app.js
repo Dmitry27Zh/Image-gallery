@@ -1,6 +1,7 @@
 import './modules/load-state.js'
 import './modules/lazy-load.js'
 import './modules/transition-state.js'
+import { throttle } from './modules/throttle.js'
 
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
@@ -99,7 +100,7 @@ const closePopup = () => {
   })
 }
 
-const switchImage = (isPrev) => {
+const switchImage = throttle((isPrev) => {
   const isNext = !isPrev
   const isSwitchPrev = isPrev && lastImageIndex > 0
   const isSwitchNext = isNext && lastImageIndex < imagesCount - 1
@@ -116,7 +117,7 @@ const switchImage = (isPrev) => {
   if (isSwitch) {
     closePopup().then(() => openPopup(lastImageIndex))
   }
-}
+}, 1000)
 
 const addPopupListeners = () => {
   popupElement.addEventListener('click', () => {
