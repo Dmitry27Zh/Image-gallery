@@ -4,13 +4,16 @@ import './modules/lazy-load.js'
 const imagesCount = 42
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
+const images = []
 let lastImageIndex
 
 const getImageSrc = (index, viewport = '800', category = 'architecture') => {
+  index++
   return `./img/content/${category}-${index}-${viewport}.jpg`
 }
 
 const getImageSrcset = (index, category = 'architecture') => {
+  index++
   return `./img/content/${category}-${index}-400.jpg 400w,
     ./img/content/${category}-${index}-800.jpg 800w,
     ./img/content/${category}-${index}-1200.jpg 1200w,
@@ -47,6 +50,7 @@ const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, foc
     button.append(element)
     button.setAttribute('aria-label', 'Open full image')
     element = button
+    images.push(element)
   }
 
   container.append(element)
@@ -59,25 +63,42 @@ const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, foc
 const isPopupClosed = () => !popupElement.classList.contains('is-shown')
 const isImageLoaded = (element) => element.classList.contains('is-loaded')
 
-const openPopup = (index) => {
-  const src = getImageSrc(index)
-  const srcset = getImageSrcset(index)
-  renderImage(src, srcset, null, null, ['popup-img'], popupElement)
-  popupElement.classList.add('is-shown')
-  lastImageIndex = index
+const openPopup = (index, element = images[index]) => {
+  if (isPopupClosed() && isImageLoaded(element)) {
+    element.blur()
+    const src = getImageSrc(index)
+    const srcset = getImageSrcset(index)
+    renderImage(src, srcset, null, null, ['popup-img'], popupElement)
+    popupElement.classList.add('is-shown')
+    lastImageIndex = index
+  }
 }
 
 const closePopup = () => {
-  if (!isPopupClosed()) {
-    popupElement.classList.remove('is-shown')
-    popupElement.innerHTML = ''
-  }
+  return new Promise((resolve) => {
+    if (!isPopupClosed()) {
+      popupElement.classList.remove('is-shown')
+
+      popupElement.addEventListener(
+        'transitionend',
+        ({ target }) => {
+          if (target === popupElement) {
+            popupElement.innerHTML = ''
+            resolve()
+          }
+        },
+        {
+          once: true,
+        }
+      )
+    }
+  })
 }
 
 const switchImage = (isPrev) => {
   const isNext = !isPrev
-  const isSwitchPrev = isPrev && lastImageIndex > 1
-  const isSwitchNext = isNext && lastImageIndex < imagesCount
+  const isSwitchPrev = isPrev && lastImageIndex > 0
+  const isSwitchNext = isNext && lastImageIndex < imagesCount - 1
   const isSwitch = isSwitchPrev || isSwitchNext
 
   if (isSwitchPrev) {
@@ -117,7 +138,7 @@ const addPopupListeners = () => {
 }
 
 const renderImages = () => {
-  for (let i = 1; i <= imagesCount; i++) {
+  for (let i = 0; i < imagesCount; i++) {
     const src = ''
     const srcset = ''
     const dataSrc = getImageSrc(i)
@@ -125,10 +146,7 @@ const renderImages = () => {
 
     renderImage(src, srcset, dataSrc, dataSrcset, ['gallery-img'], galleryElement, true, (element) => {
       element.addEventListener('click', () => {
-        if (isPopupClosed() && isImageLoaded(element)) {
-          element.blur()
-          openPopup(i)
-        }
+        openPopup(i, element)
       })
     })
   }
