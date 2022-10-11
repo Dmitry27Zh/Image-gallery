@@ -56,6 +56,9 @@ const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, foc
   }
 }
 
+const isPopupClosed = () => !popupElement.classList.contains('is-shown')
+const isImageLoaded = (element) => element.classList.contains('is-loaded')
+
 const openPopup = (index) => {
   const src = getImageSrc(index)
   const srcset = getImageSrcset(index)
@@ -65,8 +68,8 @@ const openPopup = (index) => {
 }
 
 const closePopup = () => {
-  if (popupElement.classList.contains('is-shown')) {
-    popupElement.classList.remove('is-shown', 'is-loaded', 'is-error')
+  if (!isPopupClosed()) {
+    popupElement.classList.remove('is-shown')
     popupElement.innerHTML = ''
   }
 }
@@ -90,9 +93,6 @@ const switchImage = (isPrev) => {
     openPopup(lastImageIndex)
   }
 }
-
-const isPopupClosed = () => !popupElement.classList.contains('is-shown')
-const isImageLoaded = (element) => element.classList.contains('is-loaded')
 
 const addPopupListeners = () => {
   popupElement.addEventListener('click', () => {

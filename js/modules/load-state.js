@@ -18,6 +18,21 @@ const addListeners = (element) => {
   element.addEventListener('error', () => {
     container.classList.add(StateClass.ERROR)
   })
+
+  const removeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      const isElementRemoved = [...mutation.removedNodes].some((node) => node.matches?.(NodeSelector.ELEMENT))
+
+      if (isElementRemoved) {
+        container.classList.remove(...Object.values(StateClass))
+      }
+    })
+  })
+
+  removeObserver.observe(container, {
+    childList: true,
+    subtree: true,
+  })
 }
 
 const newElementsObserver = new MutationObserver((mutations) => {
