@@ -110,8 +110,7 @@ const switchImage = (isPrev) => {
   }
 
   if (isSwitch) {
-    closePopup()
-    openPopup(lastImageIndex)
+    closePopup().then(() => openPopup(lastImageIndex))
   }
 }
 
