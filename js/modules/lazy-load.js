@@ -12,12 +12,32 @@ const load = (element) => {
   if (srcSet) {
     element.srcSet = srcSet
   }
+
+  element.addEventListener('load', () => element.classList.add('lazy-loaded'))
+}
+
+const initLoad = (element) => {
+  const condition1 = new Promise((resolve) => {
+    if (element.complete) {
+      resolve()
+    }
+  })
+
+  const condition2 = new Promise((resolve) => {
+    element.addEventListener('load', () => resolve())
+  })
+
+  const condition3 = new Promise((resolve) => {
+    element.addEventListener('error', () => resolve())
+  })
+
+  Promise.race([condition1, condition2, condition3]).then(() => load(element))
 }
 
 const intersectionObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      load(entry.target)
+      initLoad(entry.target)
       intersectionObserver.unobserve(entry.target)
     }
   })
