@@ -1,7 +1,7 @@
 const STATE_ATTRIBUTE = 'data-load-state'
 
 const ElementSelector = {
-  ELEMENT: '[data-load]',
+  ELEMENT: 'img[data-load]',
   CONTAINER: '[data-load-container]',
 }
 

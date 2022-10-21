@@ -27,6 +27,7 @@ const createImage = (src, srcset, dataSrc, dataSrcset, classList) => {
   element.classList.add(...classList)
   element.src = src ?? ''
   element.srcset = srcset ?? ''
+  element.draggable = false
 
   if (dataSrc) {
     element.dataset.src = dataSrc
