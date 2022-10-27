@@ -3,7 +3,6 @@ import './modules/lazy-load.js'
 import './modules/transition-state.js'
 import { throttle } from './modules/throttle.js'
 
-const IMAGES_COUNT = 42
 const PRELOADED_IMAGE_VIEWPORT = '20'
 const galleryElement = document.getElementById('gallery')
 const popupElement = document.getElementById('popup')
@@ -44,24 +43,24 @@ const createImage = (src, srcset, dataSrc, dataSrcset, classList) => {
   return element
 }
 
-const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, focusable, onElementAction) => {
-  let element = createImage(src, srcset, dataSrc, dataSrcset, classList)
+const renderImage = async (src, srcset, dataSrc, dataSrcset, classList, container, focusable, onElementsAction) => {
+  const element = createImage(src, srcset, dataSrc, dataSrcset, classList)
+  let button
 
   if (focusable) {
-    const button = document.createElement('button')
+    button = document.createElement('button')
     button.classList.add('image-btn')
     button.setAttribute('data-load-container', '')
     button.append(element)
     button.setAttribute('aria-label', 'Open full image')
-    element = button
-    images.push(element)
+    images.push(button)
   }
 
-  container.append(element)
-
-  if (typeof onElementAction === 'function') {
-    onElementAction(element)
+  if (typeof onElementsAction === 'function') {
+    await onElementsAction(element, button)
   }
+
+  container.append(button ?? element)
 }
 
 const isPopupClosed = () => !popupElement.classList.contains('is-shown')
@@ -143,18 +142,40 @@ const addPopupListeners = () => {
   })
 }
 
-const renderImages = () => {
-  for (let i = 0; i < IMAGES_COUNT; i++) {
+const waitImageLoad = (element) => {
+  return new Promise((resolve, reject) => {
+    element.addEventListener('load', () => resolve())
+    element.addEventListener('error', () => reject())
+  })
+}
+
+const renderImages = async () => {
+  for (let i = 0; true; i++) {
     const src = getImageSrc(i, PRELOADED_IMAGE_VIEWPORT)
     const srcset = ''
     const dataSrc = getImageSrc(i)
     const dataSrcset = ''
 
-    renderImage(src, srcset, dataSrc, dataSrcset, ['gallery-img'], galleryElement, true, (element) => {
-      element.addEventListener('click', () => {
-        openPopup(i, element)
-      })
-    })
+    try {
+      await renderImage(
+        src,
+        srcset,
+        dataSrc,
+        dataSrcset,
+        ['gallery-img'],
+        galleryElement,
+        true,
+        async (element, button) => {
+          await waitImageLoad(element)
+
+          button.addEventListener('click', () => {
+            openPopup(i, button)
+          })
+        }
+      )
+    } catch (err) {
+      break
+    }
   }
 }
 
