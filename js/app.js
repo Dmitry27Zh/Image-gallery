@@ -53,11 +53,14 @@ const renderImage = async (src, srcset, dataSrc, dataSrcset, classList, containe
     button.setAttribute('data-load-container', '')
     button.append(element)
     button.setAttribute('aria-label', 'Open full image')
-    images.push(button)
   }
 
   if (typeof onElementsAction === 'function') {
     await onElementsAction(element, button)
+  }
+
+  if (button) {
+    images.push(button)
   }
 
   container.append(button ?? element)
@@ -104,7 +107,7 @@ const closePopup = () => {
 const switchImage = throttle((isPrev) => {
   const isNext = !isPrev
   const isSwitchPrev = isPrev && lastImageIndex > 0
-  const isSwitchNext = isNext && lastImageIndex < IMAGES_COUNT - 1
+  const isSwitchNext = isNext && lastImageIndex < images.length - 1
   const isSwitch = isSwitchPrev || isSwitchNext
 
   if (isSwitchPrev) {
