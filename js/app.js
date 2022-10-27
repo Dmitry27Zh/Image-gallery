@@ -66,7 +66,7 @@ const renderImage = (src, srcset, dataSrc, dataSrcset, classList, container, foc
 
 const isPopupClosed = () => !popupElement.classList.contains('is-shown')
 const isPopupTransition = () => popupElement.classList.contains('is-transition')
-const isImageLoaded = (element) => element.getAttribute('data-load-state') === 'loaded'
+const isImageLoaded = (element) => !!element.querySelector('.lazy-loaded')
 
 const openPopup = (index, element = images[index]) => {
   const isOpenAllowed = !isPopupTransition() && isPopupClosed() && isImageLoaded(element)
